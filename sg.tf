@@ -3,6 +3,6 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = [aws_subnet.private.id]
 
   tags = {
-    Name = "MainDBSubnetGroup"
+    Name = "Main-DB Subnet-Group"
   }
 }
