@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    environment {
+        PRIMARY_DB_ID = 'orchestrator-primary-db'
+        SNS_TOPIC_ARN = 'rds-failover-notifications'
+    }
+
+    stages {
+        stage('Check Replication Health') {
+            steps {
+                script {
+                    def replicationStatus = sh(script: """
+                        aws rds describe-db-instances --db-instance-identifier $PRIMARY_DB_ID \
+                        --query 'DBInstances[0].ReadReplicaDBInstanceIdentifiers' \
+                        --region us-east-1 --output text
+                    """, returnStdout: true).trim()
+
+                    if (!replicationStatus) {
+                        error("Replication is down. Initiating failover.")
+                    } else {
+                        echo "Replication is healthy."
+                    }
+                }
+            }
+        }
+    }
+}
