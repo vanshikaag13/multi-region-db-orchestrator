@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        PRIMARY_DB_ID = 'orchestrator-primary-db'
-        SNS_TOPIC_ARN = 'rds-failover-notifications'
+        PRIMARY_DB_ID = 'primary-db'
+        SNS_TOPIC_ARN = '<your-sns-topic>'
     }
 
     stages {
@@ -21,6 +21,18 @@ pipeline {
                     } else {
                         echo "Replication is healthy."
                     }
+                }
+            }
+        }
+
+        stage('Trigger Lambda for Failover') {
+            steps {
+                script {
+                    sh """
+                        aws lambda invoke --function-name failover-trigger \
+                        --region us-west-2 /tmp/response.json
+                    """
+                    echo "Failover triggered via Lambda."
                 }
             }
         }
