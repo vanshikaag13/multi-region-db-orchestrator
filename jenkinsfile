@@ -36,5 +36,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Maintenance via SSM') {
+            steps {
+                script {
+                    sh """
+                        aws ssm send-command --document-name "AWS-RunShellScript" \
+                        --targets "Key=instanceIds,Values=<your-ec2-instance-id>" \
+                        --comment "Running DB maintenance tasks" \
+                        --parameters '{"commands":["sudo yum update -y"]}' \
+                        --region us-east-1
+                    """
+                    echo "Maintenance tasks completed."
+                }
+            }
+        }
     }
 }
