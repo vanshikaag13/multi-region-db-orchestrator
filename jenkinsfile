@@ -51,5 +51,24 @@ pipeline {
                 }
             }
         }
+
+        stage('Send SNS Notification') {
+            steps {
+                script {
+                    sh """
+                        aws sns publish --topic-arn $SNS_TOPIC_ARN \
+                        --message 'Replication status checked and failover executed.' \
+                        --region us-east-1
+                    """
+                    echo "Notification sent to SNS."
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline completed."
+        }
     }
 }
