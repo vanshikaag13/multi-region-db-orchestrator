@@ -1,4 +1,4 @@
-## **CloudSyncDB Overview**  
+## **Overview**  
 This project automates **cross-region database replication** and **failover** for AWS RDS instances using Terraform, Jenkins, and other AWS services. It ensures high availability, minimal downtime, and automated remediation during failures, providing an optimized infrastructure for business-critical applications.
 
 ---
@@ -98,6 +98,3 @@ Feel free to submit pull requests or report issues to improve this project. Cont
 This project is licensed under the MIT License.
 
 ---
-
-## **Contact**  
-For questions or feedback, please contact [your-email@example.com].
